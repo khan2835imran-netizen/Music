@@ -1,6 +1,7 @@
 package com.imran.music.player
 
 import android.content.Context
+import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import androidx.media3.common.MediaItem
@@ -44,8 +45,10 @@ class PlaybackController(context: Context) {
 
  private fun mediaItem(s: Song) = MediaItem.Builder()
   .setMediaId(s.id.toString()).setUri(s.uri)
-  .setMediaMetadata(MediaMetadata.Builder().setTitle(s.title).setArtist(s.artist).setAlbumTitle(s.album).build())
-  .build()
+  .setMediaMetadata(
+   MediaMetadata.Builder().setTitle(s.title).setArtist(s.artist).setAlbumTitle(s.album)
+    .apply { s.artwork?.let { setArtworkUri(Uri.parse(it)) } }.build()
+  ).build()
 
  private fun runOnController(action: (MediaController) -> Unit) {
   if (future.isDone) {
