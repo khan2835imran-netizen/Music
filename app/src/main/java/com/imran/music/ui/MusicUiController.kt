@@ -24,7 +24,7 @@ import kotlinx.coroutines.withContext
 class MusicUiController(private val activity: MainActivity, private val binding: ActivityMainBinding) {
  private val repository = MusicRepository(activity)
  private val store = LibraryStore(activity)
- private val playback = PlaybackController(activity)
+ private val playback by lazy { PlaybackController(activity) }
  private val playlistAdapter = PlaylistAdapter(store) { openPlaylist(it) }
  private val adapter = SongAdapter(store, { song ->
   playback.play(song); showMini(song)
@@ -163,5 +163,6 @@ class MusicUiController(private val activity: MainActivity, private val binding:
   }.show()
  }
 
- fun release() = playback.release()
+ fun release() { if (this::class.java != null) { runCatching { if (playbackInitialized()) playback.release() } } }
+ private fun playbackInitialized(): Boolean = runCatching { playback; true }.getOrDefault(false)
 }
