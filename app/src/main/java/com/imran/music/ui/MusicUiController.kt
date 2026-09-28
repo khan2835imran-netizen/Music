@@ -59,6 +59,14 @@ class MusicUiController(private val activity: MainActivity, private val binding:
    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { if (mode != "playlists") render(filter(s?.toString().orEmpty())) }
    override fun afterTextChanged(s: Editable?) {}
   })
+  refreshLibrary()
+ }
+
+ fun refreshLibrary() {
+  if (!hasAudioPermission()) {
+   binding.emptyText.text = "Allow music access to load your songs"
+   return
+  }
   activity.lifecycleScope.launch {
    val result = runCatching { withContext(Dispatchers.IO) { repository.scan() } }.getOrElse { emptyList() }
    songs = result
