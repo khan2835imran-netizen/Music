@@ -26,10 +26,10 @@ class MusicUiController(private val activity: MainActivity, private val binding:
  private val store = LibraryStore(activity)
  private val playback = PlaybackController(activity)
  private val playlistAdapter = PlaylistAdapter(store) { openPlaylist(it) }
- private val adapter = SongAdapter(store) { song ->
+ private val adapter = SongAdapter(store, { song ->
   playback.play(song); showMini(song)
   activity.startActivity(Intent(activity, NowPlayingActivity::class.java))
- }
+ }, { song -> addSongToPlaylist(song) })
  private var songs = listOf<Song>()
  private var mode = "library"
 
