@@ -68,10 +68,24 @@ class MusicUiController(private val activity: MainActivity, private val binding:
     binding.miniPlay.setImageResource(if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play)
    }
   })
+  refreshLibrary()
+ }
+
+ fun refreshLibrary() {
+  if (!hasAudioPermission()) {
+   binding.emptyText.text = "Allow music access to load your songs"
+   return
+  }
   activity.lifecycleScope.launch {
-   songs = withContext(Dispatchers.IO) { repository.scan() }
+   val result = runCatching { withContext(Dispatchers.IO) { repository.scan() } }.getOrElse { emptyList() }
+   songs = result
    render(songs)
   }
+ }
+
+ private fun hasAudioPermission(): Boolean {
+  val permission = if (android.os.Build.VERSION.SDK_INT >= 33) android.Manifest.permission.READ_MEDIA_AUDIO else android.Manifest.permission.READ_EXTERNAL_STORAGE
+  return androidx.core.content.ContextCompat.checkSelfPermission(activity, permission) == android.content.pm.PackageManager.PERMISSION_GRANTED
  }
 
  private fun select(value: String) {
