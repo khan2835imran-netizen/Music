@@ -6,8 +6,6 @@ on:
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
-  release:
-    types: [published]
 
 permissions:
   contents: write
@@ -51,9 +49,11 @@ jobs:
           retention-days: 30
 
       - name: Publish APKs to GitHub Release
-        if: startsWith(github.ref, 'refs/tags/')
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: v0.1.${{ github.run_number }}
+          name: Music v0.1.${{ github.run_number }}
           generate_release_notes: true
           files: |
             app/build/outputs/apk/debug/*.apk
