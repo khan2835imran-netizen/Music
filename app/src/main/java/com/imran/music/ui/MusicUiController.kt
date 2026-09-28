@@ -18,7 +18,7 @@ class MusicUiController(private val activity:MainActivity,private val binding:Ac
  private val repository=MusicRepository(activity)
  private val playback=PlaybackController(activity)
  private val store=LibraryStore(activity)
- private val adapter=SongAdapter{playback.play(it)}
+ private val adapter=SongAdapter{ song -> playback.play(song); activity.startActivity(android.content.Intent(activity, com.imran.music.player.NowPlayingActivity::class.java)) }
  private var songs=listOf<Song>()
  private var showingFavorites=false
 
