@@ -18,16 +18,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class MusicUiController(
- private val activity: MainActivity,
- private val binding: ActivityMainBinding
-) {
+class MusicUiController(private val activity: MainActivity, private val binding: ActivityMainBinding) {
  private val repository = MusicRepository(activity)
  private val store = LibraryStore(activity)
  private val playback = PlaybackController(activity)
  private val adapter = SongAdapter(store) { song ->
-  playback.play(song)
-  showMini(song)
+  playback.play(song); showMini(song)
   activity.startActivity(Intent(activity, NowPlayingActivity::class.java))
  }
  private var songs = listOf<Song>()
@@ -37,7 +33,6 @@ class MusicUiController(
   binding.songList.layoutManager = LinearLayoutManager(activity)
   binding.songList.adapter = adapter
   binding.emptyText.text = "Scanning your offline music…"
-
   binding.searchButton.setOnClickListener {
    binding.search.visibility = if (binding.search.visibility == android.view.View.VISIBLE) android.view.View.GONE else android.view.View.VISIBLE
    if (binding.search.visibility == android.view.View.VISIBLE) binding.search.requestFocus()
@@ -46,29 +41,26 @@ class MusicUiController(
   binding.miniPlay.setOnClickListener { playback.playPause() }
   binding.miniNext.setOnClickListener { playback.next() }
   binding.miniPlayer.setOnClickListener { activity.startActivity(Intent(activity, NowPlayingActivity::class.java)) }
-
   binding.tabLibrary.setOnClickListener { select("library") }
   binding.tabFavorites.setOnClickListener { select("favorites") }
   binding.tabAlbums.setOnClickListener { select("albums") }
   binding.tabArtists.setOnClickListener { select("artists") }
   binding.tabPlaylists.setOnClickListener { select("playlists") }
-
   binding.search.addTextChangedListener(object : TextWatcher {
    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { render(filter(s?.toString().orEmpty())) }
    override fun afterTextChanged(s: Editable?) {}
   })
-
   playback.addListener(object : androidx.media3.common.Player.Listener {
    override fun onMediaMetadataChanged(m: androidx.media3.common.MediaMetadata) {
     binding.miniTitle.text = m.title ?: "Nothing playing"
     binding.miniArtist.text = m.artist ?: "Choose a song"
+    m.artworkUri?.let { runCatching { binding.miniArtwork.setImageURI(Uri.parse(it.toString())) } }
    }
    override fun onIsPlayingChanged(isPlaying: Boolean) {
     binding.miniPlay.setImageResource(if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play)
    }
   })
-
   activity.lifecycleScope.launch {
    songs = withContext(Dispatchers.IO) { repository.scan() }
    render(songs)
@@ -105,8 +97,7 @@ class MusicUiController(
   adapter.submit(list)
   binding.emptyText.text = when {
    list.isNotEmpty() -> ""
-   mode == "favorites" -> "No favorite songs yet
-Tap the heart on a song to save it."
+   mode == "favorites" -> "No favorite songs yet\nTap the heart on a song to save it."
    mode == "playlists" -> "Your playlists will appear here."
    else -> if (songs.isEmpty()) "No music found on this device" else "No matching songs"
   }
