@@ -1,1 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?><resources><style name="Theme.Music" parent="Theme.Material3.Dark.NoActionBar"><item name="android:fontFamily">sans</item><item name="android:navigationBarColor">@color/background</item><item name="android:statusBarColor">@color/background</item><item name="colorPrimary">#00D2E6</item></style></resources>
+<?xml version="1.0" encoding="utf-8"?><resources>
+<style name="Theme.Music" parent="Theme.Material3.Dark.NoActionBar">
+ <item name="android:fontFamily">sans</item>
+ <item name="android:navigationBarColor">@color/background</item>
+ <item name="android:statusBarColor">@color/background</item>
+ <item name="android:windowLightStatusBar">false</item>
+ <item name="colorPrimary">@color/accent</item>
+ <item name="colorSecondary">@color/accent_soft</item>
+ <item name="android:windowActionModeOverlay">true</item>
+</style>
+</resources>
