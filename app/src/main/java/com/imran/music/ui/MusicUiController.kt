@@ -59,24 +59,6 @@ class MusicUiController(private val activity: MainActivity, private val binding:
    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { if (mode != "playlists") render(filter(s?.toString().orEmpty())) }
    override fun afterTextChanged(s: Editable?) {}
   })
-  player().addListener(object : androidx.media3.common.Player.Listener {
-   override fun onMediaMetadataChanged(m: androidx.media3.common.MediaMetadata) {
-    binding.miniTitle.text = m.title ?: "Nothing playing"
-    binding.miniArtist.text = m.artist ?: "Choose a song"
-    m.artworkUri?.let { runCatching { binding.miniArtwork.setImageURI(Uri.parse(it.toString())) } }
-   }
-   override fun onIsPlayingChanged(isPlaying: Boolean) {
-    binding.miniPlay.setImageResource(if (isPlaying) R.drawable.ic_pause else R.drawable.ic_play)
-   }
-  })
-  refreshLibrary()
- }
-
- fun refreshLibrary() {
-  if (!hasAudioPermission()) {
-   binding.emptyText.text = "Allow music access to load your songs"
-   return
-  }
   activity.lifecycleScope.launch {
    val result = runCatching { withContext(Dispatchers.IO) { repository.scan() } }.getOrElse { emptyList() }
    songs = result
