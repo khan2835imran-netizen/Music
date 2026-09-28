@@ -18,22 +18,18 @@ class PlaybackController(context: Context) {
  ).buildAsync()
 
  fun play(song: Song) {
-  val item = MediaItem.Builder()
-   .setMediaId(song.id.toString())
-   .setUri(song.uri)
-   .setMediaMetadata(MediaMetadata.Builder().setTitle(song.title).setArtist(song.artist).setAlbumTitle(song.album).build())
-   .build()
+  val item = mediaItem(song)
   runOnController { it.setMediaItem(item); it.prepare(); it.play() }
  }
 
  fun playQueue(songs: List<Song>, start: Int = 0) {
-  val items = songs.map {
-   MediaItem.Builder().setMediaId(it.id.toString()).setUri(it.uri)
-    .setMediaMetadata(MediaMetadata.Builder().setTitle(it.title).setArtist(it.artist).setAlbumTitle(it.album).build()).build()
-  }
+  val items = songs.map(::mediaItem)
   runOnController { it.setMediaItems(items, start, 0); it.prepare(); it.play() }
  }
 
+ fun playPause() = runOnController { if (it.isPlaying) it.pause() else it.play() }
+ fun next() = runOnController { it.seekToNext() }
+ fun previous() = runOnController { it.seekToPrevious() }
  fun toggleShuffle() = runOnController { it.shuffleModeEnabled = !it.shuffleModeEnabled }
 
  fun cycleRepeat() = runOnController {
@@ -43,6 +39,13 @@ class PlaybackController(context: Context) {
    else -> Player.REPEAT_MODE_OFF
   }
  }
+
+ fun addListener(listener: Player.Listener) = runOnController { it.addListener(listener) }
+
+ private fun mediaItem(s: Song) = MediaItem.Builder()
+  .setMediaId(s.id.toString()).setUri(s.uri)
+  .setMediaMetadata(MediaMetadata.Builder().setTitle(s.title).setArtist(s.artist).setAlbumTitle(s.album).build())
+  .build()
 
  private fun runOnController(action: (MediaController) -> Unit) {
   if (future.isDone) {
@@ -54,7 +57,5 @@ class PlaybackController(context: Context) {
   }
  }
 
- fun release() {
-  MediaController.releaseFuture(future)
- }
+ fun release() = MediaController.releaseFuture(future)
 }
