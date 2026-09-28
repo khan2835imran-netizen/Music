@@ -39,7 +39,7 @@ class LibraryStore(context: Context) {
   val out = mutableListOf<String>()
   val keys = all.keys()
   while (keys.hasNext()) out += keys.next()
-  return out.sorted(String.CASE_INSENSITIVE_ORDER)
+  return out.sortedWith(String.CASE_INSENSITIVE_ORDER)
  }
 
  fun playlistSongIds(name: String): Set<Long> {
