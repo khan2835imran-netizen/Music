@@ -24,10 +24,11 @@ import kotlinx.coroutines.withContext
 class MusicUiController(private val activity: MainActivity, private val binding: ActivityMainBinding) {
  private val repository = MusicRepository(activity)
  private val store = LibraryStore(activity)
- private val playback by lazy { PlaybackController(activity) }
+ private var playback: PlaybackController? = null
+ private fun player(): PlaybackController { return playback ?: PlaybackController(activity).also { playback = it } }
  private val playlistAdapter = PlaylistAdapter(store) { openPlaylist(it) }
  private val adapter = SongAdapter(store, { song ->
-  playback.play(song); showMini(song)
+  player().play(song); showMini(song)
   activity.startActivity(Intent(activity, NowPlayingActivity::class.java))
  }, { song -> addSongToPlaylist(song) })
  private var songs = listOf<Song>()
@@ -43,9 +44,9 @@ class MusicUiController(private val activity: MainActivity, private val binding:
    binding.search.visibility = if (binding.search.visibility == View.VISIBLE) View.GONE else View.VISIBLE
    if (binding.search.visibility == View.VISIBLE) binding.search.requestFocus()
   }
-  binding.shuffleFab.setOnClickListener { if (songs.isNotEmpty()) playback.playQueue(songs.shuffled()) }
-  binding.miniPlay.setOnClickListener { playback.playPause() }
-  binding.miniNext.setOnClickListener { playback.next() }
+  binding.shuffleFab.setOnClickListener { if (songs.isNotEmpty()) player().playQueue(songs.shuffled()) }
+  binding.miniPlay.setOnClickListener { player().playPause() }
+  binding.miniNext.setOnClickListener { player().next() }
   binding.miniPlayer.setOnClickListener { activity.startActivity(Intent(activity, NowPlayingActivity::class.java)) }
   binding.addPlaylist.setOnClickListener { showCreatePlaylist() }
   binding.tabLibrary.setOnClickListener { select("library") }
@@ -58,7 +59,7 @@ class MusicUiController(private val activity: MainActivity, private val binding:
    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) { if (mode != "playlists") render(filter(s?.toString().orEmpty())) }
    override fun afterTextChanged(s: Editable?) {}
   })
-  playback.addListener(object : androidx.media3.common.Player.Listener {
+  player().addListener(object : androidx.media3.common.Player.Listener {
    override fun onMediaMetadataChanged(m: androidx.media3.common.MediaMetadata) {
     binding.miniTitle.text = m.title ?: "Nothing playing"
     binding.miniArtist.text = m.artist ?: "Choose a song"
@@ -163,6 +164,5 @@ class MusicUiController(private val activity: MainActivity, private val binding:
   }.show()
  }
 
- fun release() { if (this::class.java != null) { runCatching { if (playbackInitialized()) playback.release() } } }
- private fun playbackInitialized(): Boolean = runCatching { playback; true }.getOrDefault(false)
+ fun release() { playback?.release(); playback = null }
 }
