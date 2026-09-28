@@ -1,33 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
- android:layout_width="match_parent" android:layout_height="match_parent" android:background="@color/background" android:paddingStart="20dp" android:paddingEnd="20dp">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
+ android:layout_width="match_parent" android:layout_height="match_parent" android:fillViewport="true" android:background="@color/background">
+ <androidx.constraintlayout.widget.ConstraintLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:paddingStart="20dp" android:paddingEnd="20dp" android:paddingBottom="24dp">
 
- <ImageButton android:id="@+id/back" android:layout_width="48dp" android:layout_height="48dp" android:background="@android:color/transparent" android:src="@drawable/ic_prev" android:rotation="180" android:padding="12dp" android:contentDescription="Back"
-  app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="10dp"/>
+  <ImageButton android:id="@+id/back" android:layout_width="48dp" android:layout_height="48dp" android:background="@android:color/transparent" android:src="@drawable/ic_prev" android:rotation="180" android:padding="12dp" android:contentDescription="Back" app:layout_constraintTop_toTopOf="parent" app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="10dp"/>
+  <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NOW PLAYING" android:textColor="@color/text_secondary" android:textSize="11sp" android:textStyle="bold" app:layout_constraintTop_toTopOf="@id/back" app:layout_constraintBottom_toBottomOf="@id/back" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
+  <ImageButton android:id="@+id/menu" android:layout_width="48dp" android:layout_height="48dp" android:background="@android:color/transparent" android:src="@drawable/ic_repeat" android:alpha="0.7" android:padding="12dp" android:contentDescription="Repeat" app:layout_constraintTop_toTopOf="@id/back" app:layout_constraintEnd_toEndOf="parent"/>
 
- <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NOW PLAYING" android:textColor="@color/text_secondary" android:textSize="11sp" android:textStyle="bold" app:layout_constraintTop_toTopOf="@id/back" app:layout_constraintBottom_toBottomOf="@id/back" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"/>
+  <ImageView android:id="@+id/artwork" android:layout_width="0dp" android:layout_height="0dp" android:layout_marginTop="26dp" android:scaleType="centerCrop" android:background="@drawable/bg_artwork" android:contentDescription="@null"
+   app:layout_constraintTop_toBottomOf="@id/back" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintDimensionRatio="1:1"/>
 
- <ImageButton android:id="@+id/menu" android:layout_width="48dp" android:layout_height="48dp" android:background="@android:color/transparent" android:src="@drawable/ic_repeat" android:alpha="0.7" android:padding="12dp" android:contentDescription="Repeat"
-  app:layout_constraintTop_toTopOf="@id/back" app:layout_constraintEnd_toEndOf="parent"/>
+  <TextView android:id="@+id/trackTitle" android:layout_width="0dp" android:layout_height="wrap_content" android:text="Nothing playing" android:textColor="@color/text_primary" android:textSize="23sp" android:textStyle="bold" android:maxLines="1" android:ellipsize="end" android:gravity="center"
+   app:layout_constraintTop_toBottomOf="@id/artwork" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="20dp"/>
+  <TextView android:id="@+id/trackArtist" android:layout_width="0dp" android:layout_height="wrap_content" android:text="Choose a song" android:textColor="@color/accent_soft" android:textSize="14sp" android:gravity="center"
+   app:layout_constraintTop_toBottomOf="@id/trackTitle" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="4dp"/>
 
- <ImageView android:id="@+id/artwork" android:layout_width="0dp" android:layout_height="0dp" android:layout_marginTop="34dp" android:scaleType="centerCrop" android:background="@drawable/bg_artwork" android:contentDescription="@null"
-  app:layout_constraintTop_toBottomOf="@id/back" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" app:layout_constraintDimensionRatio="1:1" android:maxHeight="340dp"/>
+  <LinearLayout android:id="@+id/featureTabs" android:layout_width="0dp" android:layout_height="42dp" android:orientation="horizontal" android:gravity="center" android:layout_marginTop="12dp" android:background="@drawable/bg_card"
+   app:layout_constraintTop_toBottomOf="@id/trackArtist" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent">
+   <TextView android:id="@+id/tabPlayer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="PLAYER" android:textColor="@color/accent" android:textSize="10sp" android:textStyle="bold"/>
+   <TextView android:id="@+id/tabLyrics" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="LYRICS" android:textColor="@color/text_secondary" android:textSize="10sp"/>
+   <TextView android:id="@+id/tabEqualizer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="EQUALIZER" android:textColor="@color/text_secondary" android:textSize="10sp"/>
+   <TextView android:id="@+id/tabVisualizer" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" android:gravity="center" android:text="VISUALIZER" android:textColor="@color/text_secondary" android:textSize="10sp"/>
+  </LinearLayout>
 
- <TextView android:id="@+id/trackTitle" android:layout_width="0dp" android:layout_height="wrap_content" android:text="Nothing playing" android:textColor="@color/text_primary" android:textSize="24sp" android:textStyle="bold" android:maxLines="1" android:ellipsize="end" android:gravity="center"
-  app:layout_constraintTop_toBottomOf="@id/artwork" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="24dp"/>
+  <FrameLayout android:id="@+id/featurePanel" android:layout_width="0dp" android:layout_height="150dp" android:layout_marginTop="8dp" app:layout_constraintTop_toBottomOf="@id/featureTabs" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent">
+   <LinearLayout android:id="@+id/playerPanel" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:orientation="vertical">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="NOW PLAYING" android:textColor="@color/text_secondary" android:textSize="10sp" android:letterSpacing="0.18"/>
+    <LinearLayout android:id="@+id/visualizerBars" android:layout_width="match_parent" android:layout_height="95dp" android:gravity="center" android:orientation="horizontal" android:layout_marginTop="5dp">
+     <View android:layout_width="5dp" android:layout_height="35dp" android:layout_margin="3dp" android:background="@drawable/bg_visualizer_bar"/>
+     <View android:layout_width="5dp" android:layout_height="60dp" android:layout_margin="3dp" android:background="@drawable/bg_visualizer_bar"/>
+     <View android:layout_width="5dp" android:layout_height="44dp" android:layout_margin="3dp" android:background="@drawable/bg_visualizer_bar"/>
+     <View android:layout_width="5dp" android:layout_height="72dp" android:layout_margin="3dp" android:background="@drawable/bg_visualizer_bar"/>
+     <View android:layout_width="5dp" android:layout_height="52dp" android:layout_margin="3dp" android:background="@drawable/bg_visualizer_bar"/>
+     <View android:layout_width="5dp" android:layout_height="82dp" android:layout_margin="3dp" android:background="@drawable/bg_visualizer_bar"/>
+     <View android:layout_width="5dp" android:layout_height="48dp" android:layout_margin="3dp" android:background="@drawable/bg_visualizer_bar"/>
+     <View android:layout_width="5dp" android:layout_height="67dp" android:layout_margin="3dp" android:background="@drawable/bg_visualizer_bar"/>
+     <View android:layout_width="5dp" android:layout_height="39dp" android:layout_margin="3dp" android:background="@drawable/bg_visualizer_bar"/>
+     <View android:layout_width="5dp" android:layout_height="58dp" android:layout_margin="3dp" android:background="@drawable/bg_visualizer_bar"/>
+     <View android:layout_width="5dp" android:layout_height="46dp" android:layout_margin="3dp" android:background="@drawable/bg_visualizer_bar"/>
+     <View android:layout_width="5dp" android:layout_height="74dp" android:layout_margin="3dp" android:background="@drawable/bg_visualizer_bar"/>
+    </LinearLayout>
+   </LinearLayout>
 
- <TextView android:id="@+id/trackArtist" android:layout_width="0dp" android:layout_height="wrap_content" android:text="Choose a song" android:textColor="@color/accent_soft" android:textSize="14sp" android:gravity="center"
-  app:layout_constraintTop_toBottomOf="@id/trackTitle" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="5dp"/>
+   <TextView android:id="@+id/lyricsPanel" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:text="Lyrics are not available for this local track." android:textColor="@color/text_secondary" android:textSize="13sp" android:padding="24dp" android:visibility="gone"/>
+   <LinearLayout android:id="@+id/equalizerPanel" android:layout_width="match_parent" android:layout_height="match_parent" android:orientation="horizontal" android:gravity="center" android:visibility="gone">
+    <SeekBar android:id="@+id/eqBass" android:layout_width="0dp" android:layout_height="130dp" android:layout_weight="1" android:rotation="-90" android:max="20" android:progress="12" android:progressTint="@color/accent"/>
+    <SeekBar android:id="@+id/eqLow" android:layout_width="0dp" android:layout_height="130dp" android:layout_weight="1" android:rotation="-90" android:max="20" android:progress="10" android:progressTint="@color/accent"/>
+    <SeekBar android:id="@+id/eqMid" android:layout_width="0dp" android:layout_height="130dp" android:layout_weight="1" android:rotation="-90" android:max="20" android:progress="11" android:progressTint="@color/accent"/>
+    <SeekBar android:id="@+id/eqHigh" android:layout_width="0dp" android:layout_height="130dp" android:layout_weight="1" android:rotation="-90" android:max="20" android:progress="9" android:progressTint="@color/accent"/>
+    <SeekBar android:id="@+id/eqTreble" android:layout_width="0dp" android:layout_height="130dp" android:layout_weight="1" android:rotation="-90" android:max="20" android:progress="12" android:progressTint="@color/accent"/>
+   </LinearLayout>
 
- <SeekBar android:id="@+id/progress" android:layout_width="0dp" android:layout_height="36dp" android:progressTint="@color/accent" android:thumbTint="@color/accent_soft"
-  app:layout_constraintTop_toBottomOf="@id/trackArtist" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="20dp"/>
+   <LinearLayout android:id="@+id/visualizerPanel" android:layout_width="match_parent" android:layout_height="match_parent" android:gravity="center" android:orientation="vertical" android:visibility="gone">
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="SPECTRUM" android:textColor="@color/text_secondary" android:textSize="10sp"/>
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Dynamic visualizer" android:textColor="@color/text_primary" android:textSize="16sp" android:textStyle="bold" android:layout_marginTop="5dp"/>
+   </LinearLayout>
+  </FrameLayout>
 
- <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="8dp"
-  app:layout_constraintTop_toBottomOf="@id/progress" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent">
-  <ImageButton android:id="@+id/shuffle" android:layout_width="54dp" android:layout_height="54dp" android:layout_weight="1" android:background="@android:color/transparent" android:src="@drawable/ic_shuffle" android:padding="15dp" android:contentDescription="Shuffle"/>
-  <ImageButton android:id="@+id/previous" android:layout_width="58dp" android:layout_height="58dp" android:layout_weight="1" android:background="@android:color/transparent" android:src="@drawable/ic_prev" android:padding="15dp" android:contentDescription="Previous"/>
-  <ImageButton android:id="@+id/playPause" android:layout_width="68dp" android:layout_height="68dp" android:layout_weight="1" android:background="@drawable/bg_pill" android:src="@drawable/ic_play" android:padding="20dp" android:contentDescription="Play or pause"/>
-  <ImageButton android:id="@+id/next" android:layout_width="58dp" android:layout_height="58dp" android:layout_weight="1" android:background="@android:color/transparent" android:src="@drawable/ic_next" android:padding="15dp" android:contentDescription="Next"/>
-  <ImageButton android:id="@+id/repeat" android:layout_width="54dp" android:layout_height="54dp" android:layout_weight="1" android:background="@android:color/transparent" android:src="@drawable/ic_repeat" android:padding="15dp" android:contentDescription="Repeat"/>
- </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+  <SeekBar android:id="@+id/progress" android:layout_width="0dp" android:layout_height="36dp" android:progressTint="@color/accent" android:thumbTint="@color/accent_soft"
+   app:layout_constraintTop_toBottomOf="@id/featurePanel" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent" android:layout_marginTop="8dp"/>
+
+  <LinearLayout android:layout_width="0dp" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginTop="4dp"
+   app:layout_constraintTop_toBottomOf="@id/progress" app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent">
+   <ImageButton android:id="@+id/shuffle" android:layout_width="54dp" android:layout_height="54dp" android:layout_weight="1" android:background="@android:color/transparent" android:src="@drawable/ic_shuffle" android:padding="15dp" android:contentDescription="Shuffle"/>
+   <ImageButton android:id="@+id/previous" android:layout_width="58dp" android:layout_height="58dp" android:layout_weight="1" android:background="@android:color/transparent" android:src="@drawable/ic_prev" android:padding="15dp" android:contentDescription="Previous"/>
+   <ImageButton android:id="@+id/playPause" android:layout_width="68dp" android:layout_height="68dp" android:layout_weight="1" android:background="@drawable/bg_pill" android:src="@drawable/ic_play" android:padding="20dp" android:contentDescription="Play or pause"/>
+   <ImageButton android:id="@+id/next" android:layout_width="58dp" android:layout_height="58dp" android:layout_weight="1" android:background="@android:color/transparent" android:src="@drawable/ic_next" android:padding="15dp" android:contentDescription="Next"/>
+   <ImageButton android:id="@+id/repeat" android:layout_width="54dp" android:layout_height="54dp" android:layout_weight="1" android:background="@android:color/transparent" android:src="@drawable/ic_repeat" android:padding="15dp" android:contentDescription="Repeat"/>
+  </LinearLayout>
+ </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
